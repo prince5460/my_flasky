@@ -11,6 +11,8 @@ python-dotenv = "*"
 flask-bootstrap = "*"
 flask-moment = "*"
 flask-wtf = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
 
 [requires]
 python_version = "3.6"
