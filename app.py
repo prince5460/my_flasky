@@ -4,35 +4,32 @@
 @Date : 19-2-26 下午2:36
 @Desc :
 '''
-from flask import Flask, make_response
+from datetime import datetime
+from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
+from flask_moment import Moment
 
 app = Flask(__name__)
+
+bootstrap = Bootstrap(app)
+moment = Moment(app)
 
 
 @app.route('/')
 def index():
-    return "<h1>Hello,Flask!</h1>"
+    return render_template('index.html', current_time=datetime.utcnow())
 
 
-# 动态路由
 @app.route('/user/<name>')
 def user(name):
-    return "<h1>Hello,{}</h1>".format(name)
+    return render_template('user.html', name=name)
 
 
-'''
-，获取应用上下文的方法是在应用实例上调用 app.app_context()
-'''
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
-# 响应
-# @app.route('/')
-# def index():
-#     return '<h1>Bad Request</h1>', 400
-#
-#
-# @app.route('/')
-# def index():
-#     response = make_response('<h1>This document carries a cookie!</h1>')
-#     response.set_cookie('answer', '42')
-#     return response
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
