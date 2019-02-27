@@ -15,18 +15,30 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_mail import Mail, Message
+from threading import Thread
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'some string'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config.update(
+    SECRET_KEY=os.getenv('SECRET_KEY', 'secret string'),
+    MAIL_SERVER=os.getenv('MAIL_SERVER'),
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
+    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
+    MAIL_DEFAULT_SENDER=('ZHOU', os.getenv('MAIL_USERNAME'))
+)
 
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+mail = Mail(app)
 
 
 class Role(db.Model):
@@ -47,6 +59,20 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
+def send_email(to, subject, template, **kwargs):
+    msg = Message(subject, recipients=[to], body=template)
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)
+    thr = Thread(target=send_async_email, args=[app, msg])
+    thr.start()
+    return thr
 
 
 class NameForm(FlaskForm):
@@ -91,6 +117,8 @@ def index():
             db.session.add(user)
             db.session.commit()
             session['known'] = False
+
+            send_email(app.config['MAIL_USERNAME'], 'New User', 'mail/new_user', user=user)
         else:
             session['known'] = True
         session['name'] = form.name.data
