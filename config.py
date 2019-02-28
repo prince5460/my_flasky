@@ -13,11 +13,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'secret string')
     MAIL_SERVER = os.getenv('MAIL_SERVER')
-    MAIL_PORT = 465
+    MAIL_PORT = os.getenv('MAIL_PORT')
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-    MAIL_DEFAULT_SENDER = ('ZHOU', os.getenv('MAIL_USERNAME'))
+    MAIL_DEFAULT_SENDER = ('Admin', os.getenv('MAIL_USERNAME'))
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
