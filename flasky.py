@@ -8,7 +8,8 @@ import os
 import click
 from flask_migrate import Migrate
 from app import create_app, db
-from app.models import User, Role, Permission
+from app.models import User, Role, Permission, Post
+from app import fake
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
@@ -28,7 +29,7 @@ def initdb(drop):
 # 注册shell上下文处理函数
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, Role=Role, User=User, Permission=Permission)
+    return dict(db=db, Role=Role, User=User, Permission=Permission, Post=Post)
 
 
 @app.cli.command()
@@ -37,3 +38,10 @@ def test():
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
+
+
+# 生成模拟数据
+@app.cli.command()
+def fakes():
+    fake.users(100)
+    fake.posts(100)

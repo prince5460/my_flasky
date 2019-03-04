@@ -21,6 +21,8 @@ class Config:
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    POSTS_PER_PAGE = 5
+
     def init_app(app):
         pass
 
