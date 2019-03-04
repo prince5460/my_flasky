@@ -23,6 +23,8 @@ login_manager.login_view = 'auth.login'  # login_view 属性用于设置登录�
 
 def create_app(config_name):
     app = Flask(__name__)
+    app.jinja_env.trim_blocks = True
+    app.jinja_env.lstrip_blocks = True
 
     app.config.from_object(config[config_name])
     # config[config_name].init_app(app)
