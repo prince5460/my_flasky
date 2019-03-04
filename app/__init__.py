@@ -11,11 +11,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_login import LoginManager
 from config import config
+from flask_pagedown import PageDown
 
 bootstrap = Bootstrap()
 moment = Moment()
 db = SQLAlchemy()
 mail = Mail()
+pagedown = PageDown()
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'  # login_view 属性用于设置登录页面的端点
@@ -34,6 +36,7 @@ def create_app(config_name):
     moment.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+    pagedown.init_app(app)
 
     from .main import main as main_blueprint
     from .auth import auth as auth_blueprint
