@@ -22,6 +22,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     POSTS_PER_PAGE = 5
+    FOLLOWERS_PER_PAGE = 50
 
     def init_app(app):
         pass
