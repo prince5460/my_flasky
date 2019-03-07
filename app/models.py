@@ -270,7 +270,7 @@ def load_user(user_id):
 
 
 class Post(db.Model):
-    __table_name__ = 'posts'
+    __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
