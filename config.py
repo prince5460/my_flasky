@@ -23,6 +23,7 @@ class Config:
 
     POSTS_PER_PAGE = 5
     FOLLOWERS_PER_PAGE = 50
+    COMMENTS_PER_PAGE = 30
 
     def init_app(app):
         pass
