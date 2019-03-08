@@ -40,19 +40,20 @@ def test():
     unittest.TextTestRunner(verbosity=2).run(tests)
 
 
-# 生成模拟数据
-@app.cli.command()
-def fakes():
-    fake.users(100)
-    fake.posts(100)
-
-
 @app.cli.command()
 def deploy():
     """Run deployment tasks."""
     # 把数据库迁移到最新修订版本
     upgrade()
+    click.echo('Database upgrade done...')
+
     # 创建或更新用户角色
     Role.insert_roles()
     # 确保所有用户都关注了他们自己
     User.add_self_follows()
+    click.echo('Role update done...')
+
+    # 生成模拟数据
+    fake.users(100)
+    fake.posts(100)
+    click.echo('Generate fake data done...')
