@@ -6,7 +6,7 @@
 '''
 import os
 import click
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from app import create_app, db
 from app.models import User, Role, Permission, Post, Follow, Comment
 from app import fake
@@ -45,3 +45,14 @@ def test():
 def fakes():
     fake.users(100)
     fake.posts(100)
+
+
+@app.cli.command()
+def deploy():
+    """Run deployment tasks."""
+    # 把数据库迁移到最新修订版本
+    upgrade()
+    # 创建或更新用户角色
+    Role.insert_roles()
+    # 确保所有用户都关注了他们自己
+    User.add_self_follows()

@@ -63,7 +63,7 @@ class Role(db.Model):
 
     def add_permission(self, perm):
         if not self.has_permission(perm):
-            self.permissions = perm
+            self.permissions += perm
 
     def remove_permission(self, perm):
         if self.has_permission(perm):
