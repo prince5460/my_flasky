@@ -53,6 +53,13 @@ def deploy():
     User.add_self_follows()
     click.echo('Role update done...')
 
+    # 生成管理员账号
+    r = Role.query.filter_by(name='Administrator').first()
+    u = User(username='test', email='test@example.com', password='123456', confirmed=True, role=r)
+    db.session.add(u)
+    db.session.commit()
+    click.echo('Admin account generate done...')
+
     # 生成模拟数据
     fake.users(100)
     fake.posts(100)

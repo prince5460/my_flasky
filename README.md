@@ -1,7 +1,7 @@
 my_flasky
 # Flask Web开发 
 
-> 代码基于狗书第二版,运行之前添加.env文件
+> 运行之前自行添加.env文件
 ```.env
 MAIL_SERVER=xxx
 MAIL_PORT=xxx
@@ -27,4 +27,12 @@ $ flask run
 
 * Running on http://127.0.0.1:5000/
 ```
+
+### Test account
+```
+* email:test@example.com
+* password:123456
+```
+
+
 
